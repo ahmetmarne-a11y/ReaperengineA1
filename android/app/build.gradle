@@ -1,8 +1,15 @@
-plugins {
-    id "com.android.application"
-    id "kotlin-android"
-    id "dev.flutter.flutter-gradle-plugin"
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader -> localProperties.load(reader) }
 }
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+if (flutterRoot == null) {
+    throw new GradleException("Flutter SDK not found.")
+}
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 android {
     namespace "com.reaper.engine"
     compileSdkVersion 34
@@ -13,8 +20,7 @@ android {
         versionCode 1
         versionName "1.0.0"
     }
-    buildTypes {
-        release { signingConfig signingConfigs.debug }
-    }
+    buildTypes { release { signingConfig signingConfigs.debug } }
 }
 flutter { source '../..' }
+dependencies { implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version" }
